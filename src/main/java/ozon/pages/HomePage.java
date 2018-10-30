@@ -21,18 +21,6 @@ public class HomePage extends TestBase {
     @FindBy(xpath = "//div[contains(text(), 'Вход')]")
     WebElement myOzonMenuSignIn;
 
-    @FindBy(xpath = "//a[contains(text(), 'Войти по почте')]")
-    WebElement signInUsingMail;
-
-    @FindBy(xpath = "//input[@type = 'text']")
-    WebElement signInMailInput;
-
-    @FindBy(xpath = "//input[@type = 'password']")
-    WebElement signInPasswordInput;
-
-    @FindBy(xpath = "//button[contains(text(), 'Войти')]")
-    WebElement signInButton;
-
     @FindBy(xpath = "//input[@type = 'text']")
     WebElement searchInput;
 
@@ -49,22 +37,9 @@ public class HomePage extends TestBase {
         return this;
     }
 
-    public HomePage setMyOzonMenuSignInClick() {
+    public LoginPage setMyOzonMenuSignInClick() {
         myOzonMenuSignIn.click();
-        return this;
-    }
-
-    public HomePage signInUsingMailClick() {
-        waitForVisible(signInUsingMail);
-        signInUsingMail.click();
-        return this;
-    }
-
-    public HomePage login(String username, String password) {
-        signInMailInput.sendKeys(username);
-        signInPasswordInput.sendKeys(password);
-        signInButton.click();
-        return this;
+        return new LoginPage();
     }
 
     public HomePage search(String item) {
@@ -91,81 +66,20 @@ public class HomePage extends TestBase {
         return namesOfItems;
     }
 
-    public HomePage moveToCard() {
+    public CardPage moveToCard() {
         waitForVisible(shoppingCardButton);
         shoppingCardButton.click();
-        return this;
+        return new CardPage();
     }
 
-    @FindBy(xpath = "//div[@class = 'bFlatButton mHuge mGreen jsMakeOrder']")
-    WebElement confirmTheOrderButton;
-
-    @FindBy(xpath = "//div[@class = 'bIconButton mRemove mGray jsRemoveAll']")
-    WebElement removeItemsButton;
-
-    @FindBy(xpath = "//a[contains(text(), 'Начать покупки')]")
-    WebElement startShoppingButton;
-
-    @FindBy(xpath = "//span[@class = 'jsInnerContentpage_title']")
-    WebElement emptyMessageShpoongCard;
-
-    public HomePage checkCardItems(HashSet<String> items) {
-        Set<String> cardItems = new HashSet<>();
-        String firstItem = "//div[@class = 'jsViewCollection jsChild_DOM_items']/div";
-        String spanXpath = "//span[@class = 'eCartItem_nameValue']";
-        String mainPatern = "//div[@class = 'jsViewCollection jsChild_DOM_items']/div/following-sibling::div[%d]";
-
-        cardItems.add(driver.findElement(By.xpath(firstItem + spanXpath)).getText());
-        for (int i = 1; i < items.size(); i++) {
-            String paternIter = String.format(mainPatern, i);
-            String nameItemXpath = paternIter + spanXpath;
-            String descriptionItem = driver.findElement(By.xpath(nameItemXpath)).getText();
-            cardItems.add(descriptionItem);
-        }
-        Assert.assertEquals("Коллекции не равны",cardItems, items);
-        return this;
-    }
-
-    public HomePage removeItemsFromCard() {
-        waitForVisible(confirmTheOrderButton);
-
-        waitForVisible(removeItemsButton);
-        removeItemsButton.click();
-        return this;
-    }
-
-
-    public HomePage setMyOzonMenuSignOutClick() {
-        WebElement popUp = driver.findElement(By.xpath("//div[@class = 'eMyOzon_Item_Top ']"));
-        Actions action = new Actions(driver);
-        action.moveToElement(popUp).build().perform();
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        action.moveToElement(popUp, 0, 171).click().build().perform();
-        return this;
-    }
-
-    public HomePage repeatPopUp() {
+    public LoginPage repeatPopUp() {
         WebElement PopUp = driver.findElement(By.xpath("//div[@class = 'top-block']"));
         Actions action = new Actions(driver);
         action.moveToElement(PopUp).build().perform();
 
-
-
         action.moveToElement(PopUp, 0, 160).click().build().perform();
         System.out.println("finish");
-        return this;
-    }
-
-    public HomePage checkSoppingCardForEmpty(String expectedText) {
-        String availableText = emptyMessageShpoongCard.getText();
-        Assert.assertEquals("Заголовок корзины не соответствует ожидаемому",expectedText, availableText);
-        return this;
+        return new LoginPage();
     }
 
 }

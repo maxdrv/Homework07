@@ -3,8 +3,11 @@ package ozon.testcases;
 import org.junit.Ignore;
 import org.junit.Test;
 import ozon.base.TestBase;
+import ozon.pages.CardPage;
 import ozon.pages.HomePage;
+import ozon.pages.LoginPage;
 import ozon.util.TestUtil;
+
 
 import java.util.HashSet;
 
@@ -12,13 +15,16 @@ import static ozon.testdata.TestData.searchItem;
 
 public class OzonTest extends TestBase {
 
-    HomePage homePage = new HomePage();
-    HashSet<String> items = new HashSet<>();
-
     @Test
     public void loginOzonTest() {
+        HomePage homePage = new HomePage();
+        CardPage cardPage = new CardPage();
+        LoginPage loginPage = new LoginPage();
+        HashSet<String> items = new HashSet<>();
+
         homePage.myOzonPopUpClick()                                     // Перевод курсора для отображения выпадающего меню
                 .setMyOzonMenuSignInClick()                             // Кнопка "Выход"
+
                 .signInUsingMailClick()                                 // Кнопка "С использованием почты"
                 .login(properties.getProperty("username"),              // Ввод логина и пароля
                         properties.getProperty("password"))
@@ -30,7 +36,7 @@ public class OzonTest extends TestBase {
                 .checkCardItems(items)                                  // Проверка на соответствие добавленных ранее предметов в корзину
                 .removeItemsFromCard();                                 // Удалить предметы из корзины
 
-        homePage.setMyOzonMenuSignOutClick()
+        cardPage.setMyOzonMenuSignOutClick()
                 .repeatPopUp()
                 .signInUsingMailClick()                                 // Кнопка "С использованием почты"
                 .login(properties.getProperty("username"),              // Ввод логина и пароля
@@ -39,7 +45,5 @@ public class OzonTest extends TestBase {
                 .moveToCard()
                 .checkSoppingCardForEmpty("Корзина пуста");
 
-
     }
-
 }
